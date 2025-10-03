@@ -1,0 +1,27 @@
+services:
+  collector:
+    build:
+      context: ./collectors
+    container_name: log-collector
+    volumes:
+      - ./logs:/app/logs        # mount thư mục logs
+      - ./db:/app/db            # mount database
+    env_file:
+      - .env
+    command: python realtime_processor.py
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ./streamlitDB
+    container_name: streamlit-dashboard
+    ports:
+      - "8501:8501"             # expose Streamlit dashboard
+    volumes:
+      - ./db:/app/db            # dashboard đọc DB chung
+    env_file:
+      - .env
+    command: streamlit run streamlit_dashboard.py --server.port=8501 --server.address=0.0.0.0
+    depends_on:
+      - collector
+    restart: unless-stopped

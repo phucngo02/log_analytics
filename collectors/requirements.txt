@@ -1,0 +1,8 @@
+sqlalchemy       # nếu kết nối DB
+psycopg2-binary  # nếu dùng Postgres
+pandas
+numpy
+matplotlib
+streamlit
+requests
+python-dotenv
